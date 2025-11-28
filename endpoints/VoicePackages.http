@@ -1,0 +1,116 @@
+@COOKIE = q=u=&t=1;t=&v=2.0&a=1; qid={{QID}}; sid={{SID}}
+
+# Escape ampersands & with %26!!!
+@LANG_DOWNLOAD_URL = http://192.168.1.10:6969/custom_voice/custom_voice.tar.gz
+@LANG_MD5 = fb9f4995856e3daa45581901bf7d805f
+@LANG_SIZE = 8171714
+#@LANG_DOWNLOAD_URL = http://192.168.1.10:6969/source/en_us_20221013.tar.gz
+#@LANG_MD5 = b567fc4557ad1a2975ab3d16622de38c
+#@LANG_SIZE = 8485734
+@LANG_ID = ywb
+@LANG_LANG = en_us
+
+### List the voice packages
+# Look in the logs from your phone for the response:
+# logcat | grep -e VoicePacketFragment.java
+POST https://q.smart.360.cn/clean/cmd/send
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+infoType = 21027 &
+data = {"cmd":"getVoicePackageInfo"} &
+taskid = {{$random.uuid}} &
+devType = 3
+
+#countryId = CZ &
+#data = {"cmd":"getVoicePackageInfo"} &
+#infoType = 21027 &
+#lang = cs_CZ &
+#sn = {{SN}} &
+#timeout = 30 &
+#devType = 3
+
+### Download the voice package
+# Look in the logs from your phone for progress
+# English package info:
+# VoicePacket{
+#    id='ywb',
+#    title='English',
+#    subTitle='English',
+#    mp3Url='https://shanghai.xstore.qihu.com/qilin-iot-master-clean-public-data-pub1-shbt/Q003_en_us_English.mp3',
+#    coverUrl='https://p.ssl.qhimg.com/t019770dfc0cc404aab.png',
+#    packetUrl='http://static.360.cn/wsm/attach/get?pjt=qcms&key=b567fc4557ad1a2975ab3d16622de38c&raw_file_name=1&file_name=en_us_20221012.tar.gz',
+#    packetMd5='b567fc4557ad1a2975ab3d16622de38c',
+#    packetSize=8485734,
+#    lang='en_us'
+# }
+# Expected LOG lines:
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='download', curVoicePackage='null', voicePackageList=null, error=0, process=0})
+# ... 1:startTimeoutTimer(id=ywb, state=null)
+# ... 1:cancelTimeoutTimer()
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=0})
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=0})
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=1})
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=20})
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=46})
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=100})
+# ... 1:cancelTimeoutTimer()
+# Expected LOG lines when the lingo is already downloaded:
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='download', curVoicePackage='null', voicePackageList=null, error=0, process=0})
+# ... 1:startTimeoutTimer(id=ywb, state=saved)
+# ... 1:cancelTimeoutTimer()
+POST https://q.smart.360.cn/clean/cmd/send
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+infoType = 21027 &
+data = {"cmd": "download", "id": "{{LANG_ID}}", "downUrl": "{{LANG_DOWNLOAD_URL}}", "md5sum": "{{LANG_MD5}}", "size": {{LANG_SIZE}}, "lang": "{{LANG_LANG}}"} &
+taskid = {{$random.uuid}} &
+devType = 3
+
+# data = {"cmd": "download", "id": "ywb", "downUrl": "http://192.168.1.10:6969/source/en_us_20221013.tar.gz", "md5sum": "b567fc4557ad1a2975ab3d16622de38c", "size": 8485734, "lang": "en_us"} &
+# data = {"cmd": "download", "id": "ywb", "downUrl": "http://static.360.cn/wsm/attach/get?pjt=qcms%26key=b567fc4557ad1a2975ab3d16622de38c%26raw_file_name=1%26file_name=en_us_20221012.tar.gz", "md5sum": "b567fc4557ad1a2975ab3d16622de38c", "size": 8485734, "lang": "en_us"} &
+
+### Apply the voice package
+# Expected LOG line:
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='apply', curVoicePackage='null', voicePackageList=null, error=0, process=0})
+POST https://q.smart.360.cn/clean/cmd/send
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+infoType = 21027 &
+data = {"cmd": "apply", "id": "{{LANG_ID}}", "downUrl": "{{LANG_DOWNLOAD_URL}}", "md5sum": "{{LANG_MD5}}", "size": {{LANG_SIZE}}, "lang": "{{LANG_LANG}}"} &
+taskid = {{$random.uuid}} &
+devType = 3
+
+### Download and apply the voice package in 1 step
+# Expected LOG lines (notice the LAN download speeds are higher, so we get less progress packets :D):
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=0})
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=26})
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='process', curVoicePackage='null', voicePackageList=null, error=0, process=67})
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='apply', curVoicePackage='null', voicePackageList=null, error=0, process=0})
+POST https://q.smart.360.cn/clean/cmd/send
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+infoType = 21027 &
+data = {"cmd": "downloadAndApply", "id": "{{LANG_ID}}", "downUrl": "{{LANG_DOWNLOAD_URL}}", "md5sum": "{{LANG_MD5}}", "size": {{LANG_SIZE}}, "lang": "{{LANG_LANG}}"} &
+taskid = {{$random.uuid}} &
+devType = 3
+
+### Delete the voice package
+# Expected LOG line:
+# ... 1:onVoicePacket(voicePacketResponse=VoicePacketResponse{id='ywb', cmd='delete', curVoicePackage='null', voicePackageList=null, error=0, process=0})
+POST https://q.smart.360.cn/clean/cmd/send
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+infoType = 21027 &
+data = {"cmd": "delete", "id": "{{LANG_ID}}"} &
+taskid = {{$random.uuid}} &
+devType = 3

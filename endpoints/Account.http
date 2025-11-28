@@ -1,0 +1,21 @@
+@COOKIE = q=u=&t=1;t=&v=2.0&a=1; qid={{QID}}; sid={{SID}}
+
+### List vaccums assosciated with your account
+POST https://q.smart.360.cn/common/dev/GetList
+Cookie: {{COOKIE}}
+
+### List some sort of invites (maybe used for sharing a robot with multiple accounts)
+POST https://q.smart.360.cn/common/share/getInviteList
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+devType = 3
+
+### Generates an invite code
+POST https://q.smart.360.cn/common/share/inviteByCode
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+devType = 3

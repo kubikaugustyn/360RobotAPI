@@ -1,0 +1,34 @@
+@COOKIE = q=u=&t=1;t=&v=2.0&a=1; qid={{QID}}; sid={{SID}}
+
+### List cleaning records
+POST https://q.smart.360.cn/clean/record/getList
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+devType = 3
+
+### Get a single cleaning record
+# Contains the map, the positions the robot visited, custom user obstacles/areas and much more.
+POST https://q.smart.360.cn/clean/record/getOne
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+cleanId = {{CLEAN_ID}} &
+devType = 3
+
+### Read all vacuum's statistics
+POST https://q.smart.360.cn/clean/record/allStatis
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+devType = 3
+
+### Read a single vacuum's statistics
+POST https://q.smart.360.cn/clean/record/statis
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+devType = 3

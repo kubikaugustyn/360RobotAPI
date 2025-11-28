@@ -1,0 +1,11 @@
+@COOKIE = q=u=&t=1;t=&v=2.0&a=1; qid={{QID}}; sid={{SID}}
+
+### List WiFi networks - BROKEN
+POST https://q.smart.360.cn/clean/cmd/send
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+infoType = 21020 &
+data = {"ctrlCode":3013,"ctrlParams":{"speedV":0.000000,"speedW":0.000000}} &
+devType = 3

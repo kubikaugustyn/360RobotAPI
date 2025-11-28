@@ -1,0 +1,9 @@
+@COOKIE = q=u=&t=1;t=&v=2.0&a=1; qid={{QID}}; sid={{SID}}
+
+### Gets a list of all backup maps for the robot vacuum
+POST https://q.smart.360.cn/clean/record/getBackupMapList
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{COOKIE}}
+
+sn = {{SN}} &
+devType = 3
