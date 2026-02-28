@@ -1,6 +1,7 @@
 @COOKIE = q=u=&t=1;t=&v=2.0&a=1; qid={{QID}}; sid={{SID}}
 
 ### List cleaning records
+# The errorEnd property is an error code, see all error codes: https://smart.360.cn/clean/errorInfo_us.json
 POST https://q.smart.360.cn/clean/record/getList
 Content-Type: application/x-www-form-urlencoded
 Cookie: {{COOKIE}}
@@ -10,6 +11,7 @@ devType = 3
 
 ### Get a single cleaning record
 # Contains the map, the positions the robot visited, custom user obstacles/areas and much more.
+# Copy the entire response into map/CleaningRecordResponse.py and run map/render_map.py
 POST https://q.smart.360.cn/clean/record/getOne
 Content-Type: application/x-www-form-urlencoded
 Cookie: {{COOKIE}}

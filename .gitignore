@@ -3,6 +3,11 @@
 /custom_voice/custom_voice.tar.gz
 /source/en_us_20221013/
 /Tests.http
+/map/CleaningRecordResponse.json
+/map/raw_map.png
+/map/colored_map.png
+/map/map_with_blocked_areas.png
+/map/map_with_rooms.png
 # Double-check
 /http-client.private.env.json
 
